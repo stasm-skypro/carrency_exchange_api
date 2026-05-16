@@ -9,10 +9,10 @@ from fastapi import APIRouter, Depends
 from app.api.schemas.currency import CurrencyExchangeRequest
 from app.utils import external_api as external_api_service
 
-router = APIRouter()
+router = APIRouter(prefix="/currencies", tags=["currency"])
 
 
-@router.get("/currency/list")
+@router.get("/list")
 def get_supported_currencies() -> dict:
     """
     Получает список поддерживаемых валют из открытого API обменных курсов.
@@ -50,7 +50,7 @@ def get_supported_currencies() -> dict:
     return external_api_service.get_supported_currencies()
 
 
-@router.get("/currency/rates")
+@router.get("/rates")
 def get_currency_rates(base: str) -> dict:
     """
     Получает свежие обменные курсы для различных валют из открытого API обменных курсов.
@@ -93,7 +93,7 @@ def get_currency_rates(base: str) -> dict:
     return external_api_service.get_currency_rates(base)
 
 
-@router.get("/currency/exchange")
+@router.get("/exchange")
 def convert_pair(params: Annotated[CurrencyExchangeRequest, Depends()]) -> dict:
     """
     Осуществляет обмен валют.
