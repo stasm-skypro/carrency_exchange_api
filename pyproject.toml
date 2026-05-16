@@ -1,0 +1,43 @@
+[project]
+name = "API обмена валют"
+version = "0.0.1"
+description = "Простое приложение для обмена валют. Пользователи могут получать последние курсы обмена различных валют и выполнять конвертацию валют."
+authors = [
+    { name = "Станислав Маяцкий", email = "stasm226@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.13,<4.0"
+
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+
+[tool.black]
+line-length = 119
+
+force-exclude = '''
+/(
+  | crates/ty_vendored/vendor
+  | crates/ruff_linter/resources
+  | crates/ruff_python_formatter/resources
+  | crates/ruff_python_parser/resources
+)/
+'''
+
+
+[tool.ruff]
+line-length = 119
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+combine-as-imports = true
