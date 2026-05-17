@@ -2,10 +2,10 @@
 Модуль API для управления пользователями.
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.api.schemas.user import UserLogin
-from app.core.security import FAKE_USERS, create_access_token
+from app.core.security import FAKE_USERS, create_access_token, get_current_user
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
@@ -29,9 +29,9 @@ def login_user(payload: UserLogin) -> dict:
 
 
 @router.get("/me")
-def get_current_user() -> dict:
+def get_me(current_user: dict = Depends(get_current_user)) -> dict:
     """
     Получение информации о текущем пользователе.
     """
 
-    return {"username": "current_user", "email": "current_user@example.com"}
+    return {"username": current_user["username"]}

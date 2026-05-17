@@ -28,7 +28,7 @@ def create_access_token(data: dict) -> str:
     payload: dict = data.copy()
     payload["exp"] = datetime.now(tz=UTC) + timedelta(minutes=30)
 
-    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(payload=payload, key=SECRET_KEY, algorithm=ALGORITHM)
 
 
 def get_current_user(credentials=Depends(security)) -> dict:
@@ -39,11 +39,11 @@ def get_current_user(credentials=Depends(security)) -> dict:
     token = credentials.credentials
     try:
         payload = jwt.decode(
-            token,
-            SECRET_KEY,
+            jwt=token,
+            key=SECRET_KEY,
             algorithms=[ALGORITHM],
         )
-        username: str = payload.get("sub")
+        username: str = payload["sub"]
         return {"username": username}
 
     except jwt.InvalidTokenError as e:
