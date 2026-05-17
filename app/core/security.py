@@ -1,5 +1,5 @@
 """
-Модуль для работы с безопасностью.
+Модуль для создания и проверки токенов доступа, и получения информации о пользователе по токену.
 """
 
 from datetime import UTC, datetime, timedelta
@@ -39,16 +39,16 @@ def get_current_user(credentials: Annotated[HTTPAuthorizationCredentials, Depend
     Получение информации о текущем пользователе.
     """
 
-    token = credentials.credentials
+    token: str = credentials.credentials
 
     if SECRET_KEY is None or ALGORITHM is None:
         raise ValueError("SECRET_KEY and ALGORITHM must be set in environment variables")
 
     try:
-        payload = jwt.decode(
+        payload: dict = jwt.decode(
             jwt=token,
             key=SECRET_KEY,
-            algorithms=ALGORITHM,
+            algorithms=[ALGORITHM],
         )
         username: str = payload["sub"]
         return {"username": username}
