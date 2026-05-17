@@ -2,6 +2,8 @@
 Модуль API для управления пользователями.
 """
 
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.api.schemas.user import UserLogin
@@ -29,7 +31,7 @@ def login_user(payload: UserLogin) -> dict:
 
 
 @router.get("/me")
-def get_me(current_user: dict = Depends(get_current_user)) -> dict:
+def get_me(current_user: Annotated[dict, Depends(get_current_user)]) -> dict:
     """
     Получение информации о текущем пользователе.
     """
