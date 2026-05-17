@@ -17,11 +17,7 @@ def get_current_user(
         raise ValueError("SECRET_KEY and ALGORITHM must be set in environment variables")
 
     try:
-        payload: dict = jwt.decode(
-            jwt=token,
-            key=SECRET_KEY,
-            algorithms=[ALGORITHM],
-        )
+        payload: dict = jwt.decode(jwt=token, key=SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload["sub"]
         return {"username": username}
 
