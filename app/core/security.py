@@ -3,11 +3,11 @@
 """
 
 from datetime import UTC, datetime, timedelta
-from typing import Annotated, Any
+from typing import Annotated
 
 import jwt
 from fastapi import Depends, HTTPException
-from fastapi.security import HTTPBearer
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 SECRET_KEY = "super-secret-key"
 ALGORITHM = "HS256"
@@ -32,14 +32,13 @@ def create_access_token(data: dict) -> str:
     return jwt.encode(payload=payload, key=SECRET_KEY, algorithm=ALGORITHM)
 
 
-# def get_current_user(credentials=Depends(dependency=security)) -> dict:
-def get_current_user(credentials: Annotated[Any, Depends(security)]) -> dict:
+def get_current_user(credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]) -> dict:
     """
     Получение информации о текущем пользователе.
     """
 
     token = credentials.credentials
-    print("credentials:", credentials)
+
     try:
         payload = jwt.decode(
             jwt=token,
