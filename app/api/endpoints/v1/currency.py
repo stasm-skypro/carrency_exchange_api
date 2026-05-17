@@ -7,6 +7,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from app.api.schemas.currency import CurrencyExchangeRequest
+from app.core.security import get_current_user
 from app.utils import external_api as external_api_service
 
 router = APIRouter(prefix="/currencies", tags=["currency"])
@@ -51,7 +52,7 @@ def get_supported_currencies() -> dict:
 
 
 @router.get("/rates")
-def get_currency_rates(base: str) -> dict:
+def get_currency_rates(base: str, current_user: Annotated[dict, Depends(get_current_user)]) -> dict:
     """
     Получает свежие обменные курсы для различных валют из открытого API обменных курсов.
     ```json
@@ -90,11 +91,15 @@ def get_currency_rates(base: str) -> dict:
     ```
     """
 
-    return external_api_service.get_currency_rates(base)
+    if current_user is not None:
+        return external_api_service.get_currency_rates(base)
 
 
 @router.get("/exchange")
-def convert_pair(params: Annotated[CurrencyExchangeRequest, Depends()]) -> dict:
+def convert_pair(
+    params: Annotated[CurrencyExchangeRequest, Depends()],
+    current_user: Annotated[dict, Depends(get_current_user)],
+) -> dict:
     """
     Осуществляет обмен валют.
     ```json
@@ -120,4 +125,5 @@ def convert_pair(params: Annotated[CurrencyExchangeRequest, Depends()]) -> dict:
     ```
     """
 
-    return external_api_service.convert_pair(params)
+    if current_user is not None:
+        return external_api_service.convert_pair(params)
