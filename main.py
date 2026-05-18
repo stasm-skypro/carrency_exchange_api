@@ -8,8 +8,8 @@ from app.api.endpoints.v1.currency import router as currency_router
 from app.api.endpoints.v1.users import router as users_router
 
 app = FastAPI()
-app.include_router(currency_router, prefix="/api/v1", tags=["currency"])
-app.include_router(users_router, prefix="/api/v1", tags=["authentication"])
+app.include_router(currency_router, prefix="/api/v2", tags=["currency"])
+app.include_router(users_router, prefix="/api/v2", tags=["authentication"])
 
 if __name__ == "__main__":
     import uvicorn
