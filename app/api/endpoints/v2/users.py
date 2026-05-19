@@ -6,16 +6,29 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.api.schemas.user import UserLogin
+from app.api.schemas.user import UserRegister, UserLogin
 from app.core.security import FAKE_USERS, create_access_token, get_current_user
 
-router = APIRouter(prefix="/auth", tags=["authentication"])
+router = APIRouter(prefix="/auth")
+
+
+@router.post("/register")
+def register_user(payload: UserRegister) -> dict:
+    """
+    Регистрация пользователя.
+    """
+    username: str = payload.username
+    password: str = payload.password
+    if username in FAKE_USERS:
+        raise HTTPException(status_code=400, detail="Username already registered")
+    FAKE_USERS[username] = {"password": password}
+    return {"message": f"User {username} registered successfully"}
 
 
 @router.post("/login")
 def login_user(payload: UserLogin) -> dict:
     """
-    Логин пользователя.
+    Аутентификация пользователя.
     """
 
     password: str = FAKE_USERS[payload.username]["password"]

@@ -10,7 +10,7 @@ from app.api.schemas.currency import CurrencyExchangeRequest
 from app.core.security import get_current_user
 from app.utils import external_api as external_api_service
 
-router = APIRouter(prefix="/currencies", tags=["currency"])
+router = APIRouter(prefix="/currencies")
 
 
 @router.get("/list")
@@ -52,7 +52,7 @@ def get_supported_currencies() -> dict:
 
 
 @router.get("/rates")
-def get_currency_rates(base: str, current_user: Annotated[dict, Depends(get_current_user)]) -> dict:
+def get_currency_list(base: str, current_user: Annotated[dict, Depends(get_current_user)]) -> dict:
     """
     Получает свежие обменные курсы для различных валют из открытого API обменных курсов.
     ```json
@@ -95,7 +95,7 @@ def get_currency_rates(base: str, current_user: Annotated[dict, Depends(get_curr
         return external_api_service.get_currency_rates(base)
 
 
-@router.get("/exchange")
+@router.get("/convert")
 def convert_pair(
     params: Annotated[CurrencyExchangeRequest, Depends()],
     current_user: Annotated[dict, Depends(get_current_user)],
