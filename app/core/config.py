@@ -5,6 +5,7 @@
 import os
 
 from dotenv import load_dotenv
+from pydantic_core.core_schema import PlainSerializerFunctionSerSchema
 
 
 # Load environment variables from .env file
@@ -14,4 +15,5 @@ API_KEY: str | None = os.getenv(key="API_KEY")
 SECRET_KEY: str | None = os.getenv(key="SECRET_KEY")
 ALGORITHM: str | None = os.getenv(key="ALGORITHM")
 
-VALID_CHARS = r"^[a-zA-Z0-9_]+$"
+USERNAME_PATTERN = r"^[a-zA-Z0-9_]+$"
+PASSWORD_PATTERN = r"^[a-zA-Z0-9_]+$"

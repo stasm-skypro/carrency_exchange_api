@@ -5,7 +5,7 @@
 
 from pydantic import BaseModel, Field, model_validator
 
-from app.core.config import VALID_CHARS
+from app.core.config import USERNAME_PATTERN, PASSWORD_PATTERN
 
 
 class UserBase(BaseModel):
@@ -13,7 +13,7 @@ class UserBase(BaseModel):
     Базовая схема для пользователя, содержащая общие поля.
     """
 
-    username: str = Field(..., min_length=3, pattern=VALID_CHARS)
+    username: str = Field(..., min_length=3, pattern=USERNAME_PATTERN)
 
 
 class UserRegister(UserBase):
@@ -22,8 +22,8 @@ class UserRegister(UserBase):
     """
 
     # Проверяем длинную (не менее чем...) и сложность пароля - допускаются только буквы и цифры
-    password: str = Field(..., min_length=4, pattern=VALID_CHARS)
-    password_confirm: str = Field(..., min_length=4, pattern=VALID_CHARS)
+    password: str = Field(..., min_length=4, pattern=PASSWORD_PATTERN)
+    password_confirm: str = Field(..., min_length=4, pattern=PASSWORD_PATTERN)
 
     @model_validator(mode="before")
     @classmethod
