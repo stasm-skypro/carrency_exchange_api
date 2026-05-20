@@ -39,3 +39,19 @@ def test_password_mismatch():
         UserRegister(**data)
 
     assert "password_confirm does not match password" in str(excinfo.value)
+
+
+@pytest.mark.parametrize("invalid_username", ["ab", "a" * 21])  # Длина имени min=3 max=20
+def test_username_validation(invalid_username):
+    """
+    Проверяет, что схема UserRegister выбрасывает ошибку при некорректной длине имени пользователя.
+    """
+
+    data = {
+        "username": invalid_username,
+        "password": "strong_pass_123",
+        "password_confirm": "strong_pass_123",
+    }
+
+    with pytest.raises(ValidationError):
+        UserRegister(**data)

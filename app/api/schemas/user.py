@@ -13,7 +13,7 @@ class UserBase(BaseModel):
     Базовая схема для пользователя, содержащая общие поля.
     """
 
-    username: str = Field(..., min_length=3, pattern=USERNAME_PATTERN)
+    username: str = Field(..., min_length=3, max_length=20, pattern=USERNAME_PATTERN)
 
 
 class UserRegister(UserBase):
