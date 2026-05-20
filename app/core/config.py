@@ -5,7 +5,6 @@
 import os
 
 from dotenv import load_dotenv
-from pydantic_core.core_schema import PlainSerializerFunctionSerSchema
 
 # Load environment variables from .env file
 load_dotenv()

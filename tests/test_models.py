@@ -70,5 +70,5 @@ def test_password_pattern_mismatch():
         "password_confirm": "weak_pass!#",
     }
 
-    with pytest.raises(ValidationError) as excinfo:
+    with pytest.raises(ValidationError):
         UserRegister(**data)
