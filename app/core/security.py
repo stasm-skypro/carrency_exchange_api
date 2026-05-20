@@ -13,13 +13,6 @@ from app.core.config import ALGORITHM, SECRET_KEY
 
 security = HTTPBearer()
 
-FAKE_USERS: dict[str, dict[str, str]] = {
-    "user1": {
-        "username": "user1",
-        "password": "1234",
-    },
-}
-
 
 def create_access_token(data: dict) -> str:
     """
@@ -36,7 +29,7 @@ def create_access_token(data: dict) -> str:
 
 def get_current_user(credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]) -> dict:
     """
-    Получение информации о текущем пользователе.
+    Получает текущего пользователя из токена доступа.
     """
 
     token: str = credentials.credentials
