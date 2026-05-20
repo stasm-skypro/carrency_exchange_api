@@ -4,9 +4,11 @@
 
 import pytest
 from pydantic import ValidationError
+
 from app.api.schemas.user import UserRegister
 
 
+# Тесты для Pydantic моделей Пользователя
 def test_user_register_success():
     """
     Проверяет, что валидная схема UserRegister проходит без ошибок.
@@ -48,10 +50,25 @@ def test_username_validation(invalid_username):
     """
 
     data = {
-        "username": invalid_username,
+        "username": invalid_username,  # Длина имени больше 20 символов
         "password": "strong_pass_123",
         "password_confirm": "strong_pass_123",
     }
 
     with pytest.raises(ValidationError):
+        UserRegister(**data)
+
+
+def test_password_pattern_mismatch():
+    """
+    Проверяет, что схема UserRegister выбрасывает ошибку при несоответствии пароля паттерну.
+    """
+
+    data = {
+        "username": "valid_username",
+        "password": "weak_pass!#",
+        "password_confirm": "weak_pass!#",
+    }
+
+    with pytest.raises(ValidationError) as excinfo:
         UserRegister(**data)
