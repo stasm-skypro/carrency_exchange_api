@@ -21,7 +21,7 @@ class UserRegister(UserBase):
     Схема для создания пользователя, наследующая от UserBase.
     """
 
-    # Проверяем длинную (не менее чем...) и сложность пароля - допускаются только буквы и цифры
+    # Проверяем длинну (не менее чем...) и сложность пароля - допускаются только буквы и цифры
     password: str = Field(..., min_length=4, pattern=PASSWORD_PATTERN)
     password_confirm: str = Field(..., min_length=4, pattern=PASSWORD_PATTERN)
 
