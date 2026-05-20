@@ -5,10 +5,11 @@
 import pytest
 from pydantic import ValidationError
 
+from app.api.schemas.currency import CurrencyExchangeRequest
 from app.api.schemas.user import UserRegister
 
 
-# Тесты для Pydantic моделей Пользователя
+# Тесты для Pydantic моделей User.
 def test_user_register_success():
     """
     Проверяет, что валидная схема UserRegister проходит без ошибок.
@@ -72,3 +73,37 @@ def test_password_pattern_mismatch():
 
     with pytest.raises(ValidationError):
         UserRegister(**data)
+
+
+# Тесты для Pydantic моделей Currency.
+def test_currency_exchange_request_success():
+    """
+    Проверяет, что валидная схема CurrencyExchangeRequest проходит без ошибок.
+    """
+
+    data = {
+        "currency_from": "USD",
+        "currency_to": "RUB",
+        "amount": 100.50,
+    }
+
+    request = CurrencyExchangeRequest(**data)
+    assert request.currency_from == "USD"
+    assert request.currency_to == "RUB"
+    assert request.amount == 100.50
+
+
+def test_currency_exchange_request_invalid_data():
+    """
+    Проверяет, что схема CurrencyExchangeRequest выбрасывает ошибку при невалидных данных.
+    """
+    # Некорректный код валюты (длина != 3) и отрицательная сумма
+    invalid_data_list = [
+        {"currency_from": "US", "currency_to": "RUB", "amount": 10},
+        {"currency_from": "USD", "currency_to": "RU", "amount": 10},
+        {"currency_from": "USD", "currency_to": "RUB", "amount": -1},
+    ]
+
+    for data in invalid_data_list:
+        with pytest.raises(ValidationError):
+            CurrencyExchangeRequest(**data)

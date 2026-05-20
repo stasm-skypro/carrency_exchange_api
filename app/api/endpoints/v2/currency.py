@@ -52,7 +52,7 @@ def get_supported_currencies() -> dict:
 
 
 @router.get("/rates")
-def get_currency_list(base: str, current_user: Annotated[dict, Depends(get_current_user)]) -> dict:
+def get_currency_list(base: str, current_user: Annotated[dict, Depends(get_current_user)]) -> dict | None:
     """
     Получает свежие обменные курсы для различных валют из открытого API обменных курсов.
     ```json
@@ -93,13 +93,13 @@ def get_currency_list(base: str, current_user: Annotated[dict, Depends(get_curre
 
     if current_user is not None:
         return external_api_service.get_currency_rates(base)
+    return None
 
 
 @router.get("/convert")
 def convert_pair(
-    params: Annotated[CurrencyExchangeRequest, Depends()],
-    current_user: Annotated[dict, Depends(get_current_user)],
-) -> dict:
+    params: Annotated[CurrencyExchangeRequest, Depends()], current_user: Annotated[dict, Depends(get_current_user)]
+) -> dict | None:
     """
     Осуществляет обмен валют.
     ```json
@@ -127,3 +127,4 @@ def convert_pair(
 
     if current_user is not None:
         return external_api_service.convert_pair(params)
+    return None
