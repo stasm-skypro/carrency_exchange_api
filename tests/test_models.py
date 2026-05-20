@@ -81,26 +81,39 @@ def test_currency_exchange_request_success():
     Проверяет, что валидная схема CurrencyExchangeRequest проходит без ошибок.
     """
 
-    data = {
-        "currency_from": "USD",
-        "currency_to": "RUB",
-        "amount": 100.50,
-    }
+    valid_data_list = [
+        {"currency_from": "USD", "currency_to": "RUB", "amount": 100.50},
+        {"currency_from": "usd", "currency_to": "rub", "amount": 100.50},
+    ]
 
-    request = CurrencyExchangeRequest(**data)
-    assert request.currency_from == "USD"
-    assert request.currency_to == "RUB"
-    assert request.amount == 100.50
+    for data in valid_data_list:
+        request = CurrencyExchangeRequest(**data)
+        assert request.currency_from == "USD"
+        assert request.currency_to == "RUB"
+        assert request.amount == 100.50
 
 
-def test_currency_exchange_request_invalid_data():
+def test_currency_exchange_request_invalid_currency_code():
     """
-    Проверяет, что схема CurrencyExchangeRequest выбрасывает ошибку при невалидных данных.
+    Проверяет, что схема CurrencyExchangeRequest выбрасывает ошибку при невалидном коде валюты.
     """
-    # Некорректный код валюты (длина != 3) и отрицательная сумма
+    # Некорректный код валюты (длина != 3)
     invalid_data_list = [
         {"currency_from": "US", "currency_to": "RUB", "amount": 10},
         {"currency_from": "USD", "currency_to": "RU", "amount": 10},
+    ]
+
+    for data in invalid_data_list:
+        with pytest.raises(ValidationError):
+            CurrencyExchangeRequest(**data)
+
+
+def test_currency_exchange_request_invalid_amount():
+    """
+    Проверяет, что схема CurrencyExchangeRequest выбрасывает ошибку при невалидной сумме конвертации.
+    """
+    # Отрицательная сумма конвертации
+    invalid_data_list = [
         {"currency_from": "USD", "currency_to": "RUB", "amount": -1},
     ]
 
