@@ -11,6 +11,7 @@ from app.api.schemas.user import UserRegister
 def create_user(user_data: UserRegister):
     """
     Создает нового пользователя.
+    -- Если пользователь с таким username уже есть в БД, то возвращает ошибку 400 - Username already registered.
     """
 
     username = user_data.username
@@ -25,6 +26,7 @@ def create_user(user_data: UserRegister):
 def get_user(username: str) -> dict[str, str]:
     """
     Возвращает пользователя по имени.
+    -- Если пользователь не найден возвращает ошибку 404 - User not found.
     """
 
     user = users_repo.get_user(username)

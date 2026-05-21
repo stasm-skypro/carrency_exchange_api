@@ -17,17 +17,19 @@ router = APIRouter(prefix="/auth")
 def register_user(payload: UserRegister) -> dict:
     """
     Регистрирует новго пользователя.
+    -- Если пользователь с таким username уже есть в БД, то возвращает ошибку 400 - Username already registered.
     """
 
-    new_user = users_service.create_user(payload)
+    response = users_service.create_user(payload)
 
-    return {"message": f"User {new_user} registered successfully"}
+    return response
 
 
 @router.post("/login")
 def login_user(payload: UserLogin) -> dict:
     """
     Аутентифицирует пользователя.
+    -- Если пользователь не найден или пароль неверный, возвращает ошибку 401 - Invalid credentials.
     """
 
     user = users_service.get_user(payload.username)
@@ -38,10 +40,12 @@ def login_user(payload: UserLogin) -> dict:
 
     access_token = create_access_token({"sub": payload.username})
 
-    return {
+    response = {
         "access_token": access_token,
         "token_type": "bearer",
     }
+
+    return response
 
 
 @router.get("/me")
