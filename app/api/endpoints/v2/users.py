@@ -2,7 +2,6 @@
 Модуль API для управления пользователями.
 """
 
-from types import new_class
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException

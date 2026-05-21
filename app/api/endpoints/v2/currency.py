@@ -93,7 +93,6 @@ def get_currency_list(base: str, current_user: Annotated[dict, Depends(get_curre
 
     if current_user is not None:
         return external_api_service.get_currency_rates(base)
-    return None
 
 
 @router.get("/convert")
@@ -127,4 +126,3 @@ def convert_pair(
 
     if current_user is not None:
         return external_api_service.convert_pair(params)
-    return None
