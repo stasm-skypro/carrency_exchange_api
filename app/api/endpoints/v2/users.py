@@ -7,10 +7,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 
 # from fastapi.security.oauth2 import OAuth2PasswordRequestForm
-
-from app.api.schemas.user import UserRegister, UserLogin
-from app.core.security import create_access_token, get_current_user
+from app.api.schemas.user import UserLogin, UserRegister
 from app.core.fake_db import FAKE_USERS
+from app.core.security import create_access_token, get_current_user
 
 router = APIRouter(prefix="/auth")
 

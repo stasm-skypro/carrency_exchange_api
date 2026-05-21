@@ -5,7 +5,7 @@
 
 from pydantic import BaseModel, Field, model_validator
 
-from app.core.config import USERNAME_PATTERN, PASSWORD_PATTERN
+from app.core.config import PASSWORD_PATTERN, USERNAME_PATTERN
 
 
 class UserBase(BaseModel):

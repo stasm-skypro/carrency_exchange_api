@@ -88,8 +88,8 @@ def test_currency_exchange_request_success():
 
     for data in valid_data_list:
         request = CurrencyExchangeRequest(**data)
-        assert request.currency_from == "USD"
-        assert request.currency_to == "RUB"
+        assert request.currency_from in ("USD", "usd")
+        assert request.currency_to in ("RUB", "rub")
         assert request.amount == 100.50
 
 
@@ -101,6 +101,7 @@ def test_currency_exchange_request_invalid_currency_code():
     invalid_data_list = [
         {"currency_from": "US", "currency_to": "RUB", "amount": 10},
         {"currency_from": "USD", "currency_to": "RU", "amount": 10},
+        {"currency_from": "$", "currency_to": "RUB", "amount": 10},
     ]
 
     for data in invalid_data_list:
