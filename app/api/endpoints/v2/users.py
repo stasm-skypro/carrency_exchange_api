@@ -1,14 +1,13 @@
 """
-Модуль API для управления пользователями с испоьзованием OAuth2.
+Модуль API для управления пользователями.
 """
 
+from types import new_class
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
-
-# from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from app.api.schemas.user import UserLogin, UserRegister
-from app.core.fake_db import FAKE_USERS
+from app.api.services import users as users_service
 from app.core.security import create_access_token, get_current_user
 
 router = APIRouter(prefix="/auth")
@@ -19,15 +18,10 @@ def register_user(payload: UserRegister) -> dict:
     """
     Регистрирует новго пользователя.
     """
-    username: str = payload.username
-    password: str = payload.password
 
-    if username in FAKE_USERS:
-        raise HTTPException(status_code=400, detail="Username already registered")
+    new_user = users_service.create_user(payload)
 
-    FAKE_USERS[username] = {"password": password}
-
-    return {"message": f"User {username} registered successfully"}
+    return {"message": f"User {new_user} registered successfully"}
 
 
 @router.post("/login")
@@ -36,7 +30,9 @@ def login_user(payload: UserLogin) -> dict:
     Аутентифицирует пользователя.
     """
 
-    password: str = FAKE_USERS[payload.username]["password"]
+    user = users_service.get_user(payload.username)
+    password: str = user["password"]
+
     if password is None or password != payload.password:
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
@@ -46,24 +42,6 @@ def login_user(payload: UserLogin) -> dict:
         "access_token": access_token,
         "token_type": "bearer",
     }
-
-
-# def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> dict:
-#     """
-#     Аутентифицирует пользователя. Вариант с использованием OAuth2PasswordRequestForm.
-#     """
-#     username: str = form_data.username
-#     password: str = form_data.password
-
-#     if username not in FAKE_USERS or FAKE_USERS[username]["password"] != password:
-#         raise HTTPException(status_code=401, detail="Invalid credentials")
-
-#     access_token = create_access_token({"sub": username})
-
-#     return {
-#         "access_token": access_token,
-#         "token_type": "bearer",
-#     }
 
 
 @router.get("/me")

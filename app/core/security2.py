@@ -1,3 +1,8 @@
+"""
+Модуль для работы с безопасностью, включая создание токенов доступа и получение текущего пользователя.
+Испльзуется OAuth2PasswordBearer.
+"""
+
 from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
