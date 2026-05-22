@@ -19,7 +19,7 @@ def clean_fake_db():
     yield
 
 
-def test_register_user_success():
+def test_register_user_success() -> None:
     """
     Тест успешной регистрации пользователя.
     """
@@ -31,8 +31,12 @@ def test_register_user_success():
     assert response.json() == {"username": "testuser", "password": "testpass"}
 
 
-def test_register_user_failed():
+def test_register_user_wrong_password_confirm() -> None:
     """
-    Тест
+    Тест регистрации пользователя с неправильным подтверждением пароля.
     """
-    pass
+    response = client.post(
+        "/api/v2/auth/register",
+        json={"username": "testuser", "password": "testpass", "password_confirm": "wrongpass"},
+    )
+    assert response.status_code == 422
