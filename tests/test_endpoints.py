@@ -78,3 +78,21 @@ def test_login_user_success() -> None:
     assert response.status_code == 200
     assert "access_token" in response.json()
     assert response.json()["token_type"] == "bearer"
+
+
+def test_login_user_invalid_credentials() -> None:
+    """
+    Тест аутентификации с неверными учетными данными.
+    """
+    # Сначала регистрируем пользователя
+    client.post(
+        "/api/v2/auth/register",
+        json={"username": "testuser", "password": "testpass", "password_confirm": "testpass"},
+    )
+    # Пытаемся аутентифицироваться с неверным паролем
+    response = client.post(
+        "/api/v2/auth/login",
+        json={"username": "testuser", "password": "wrongpass"},
+    )
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Invalid credentials"
