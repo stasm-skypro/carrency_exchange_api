@@ -59,3 +59,22 @@ def test_register_user_existing_username() -> None:
     )
     assert response.status_code == 400
     assert response.json()["detail"] == "Username already registered"
+
+
+def test_login_user_success() -> None:
+    """
+    Тест успешной аутентификации пользователя.
+    """
+    # Сначала регистрируем пользователя
+    client.post(
+        "/api/v2/auth/register",
+        json={"username": "testuser", "password": "testpass", "password_confirm": "testpass"},
+    )
+    # Затем аутентифицируемся
+    response = client.post(
+        "/api/v2/auth/login",
+        json={"username": "testuser", "password": "testpass"},
+    )
+    assert response.status_code == 200
+    assert "access_token" in response.json()
+    assert response.json()["token_type"] == "bearer"

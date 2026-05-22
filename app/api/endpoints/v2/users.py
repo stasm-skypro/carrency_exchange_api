@@ -5,6 +5,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
+
 from app.api.schemas.user import UserLogin, UserRegister
 from app.api.services import users as users_service
 from app.core.security import create_access_token, get_current_user
