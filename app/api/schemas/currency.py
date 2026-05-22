@@ -31,7 +31,7 @@ class CurrencyExchangeRequest(BaseModel):
         pattern=CURRENCY_PATTERN,
     )
     amount: Decimal = Field(
-        default=Decimal(0),
+        default=Decimal(1),
         ge=Decimal(0),
         description="Amount must be a positive number",
     )
