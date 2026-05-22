@@ -14,17 +14,31 @@ project/
 │   │   ├── __init__.py
 │   │   ├── endpoints/
 │   │   │   ├── __init__.py
+│   │   │   ├── v1/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── currency.py
+│   │   │   │   └── users.py
+│   │   │   ├── v2/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── currency.py
+│   │   │   │   └── users.py
 │   │   │   ├── currency.py
 │   │   │   ├── users.py
 │   │   │   └── ...
-│   │   └── models/
-│   │       ├── __init__.py
-│   │       ├── user.py
-│   │       ├── currency.py
-│   │       └── ...
+│   │   ├── repository/
+│   │   │   ├── __init__.py
+│   │   │   └── user.py
+│   │   ├── schemas/
+│   │   │   ├── __init__.py
+│   │   │   ├── currency.py
+│   │   │   └── user.py
+│   │   └── services/
+│   │   │   ├── __init__.py
+│   │   │   └── users.py
 │   ├── core/
 │   │   ├── __init__.py
 │   │   ├── config.py
+│   │   ├── fake_db.py
 │   │   └── security.py
 │   ├── utils/
 │   │   ├── __init__.py
