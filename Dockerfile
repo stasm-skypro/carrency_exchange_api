@@ -2,18 +2,20 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-# System dependencies for standard Python build and runtime
+# Устанавливаем необходимые системные зависимости для сборки и работы приложения.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy only dependency files first for better build caching
+# Копируем файлы, необходимые для установки зависимостей,
 COPY pyproject.toml requirements.txt /app/
 
+# и устанавливаем их в виртуальном окружении.
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
+# Копируем остальные файлы приложения в контейнер.
 COPY . /app
 
 ENV PYTHONUNBUFFERED=1
